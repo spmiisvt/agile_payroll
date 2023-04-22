@@ -1,6 +1,8 @@
 #pragma once
-#include "PaymentClassification.h"
 
+#include "PaymentClassification.h"
+#include "Date.h"
+#include "TimeCard.h"
 #include <map>;
 using namespace std;
 
@@ -15,8 +17,10 @@ public:
 
 	double GetRate() const { return itsRate; }
 
+	void AddTimeCard(TimeCard* tc);
+	TimeCard* GetTimeCard(const Date& date);
 
 private:
 	double itsRate;
-
+	map<Date, TimeCard*> itsTimeCards;
 };

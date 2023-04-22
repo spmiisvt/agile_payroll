@@ -13,6 +13,8 @@
 #include "CommissionedClassification.h"
 #include "BiweeklySchedule.h"
 #include "DeleteEmployeeTransaction.h"
+#include "TimeCardTransaction.h"
+#include "TimeCard.h"
 
 extern PayrollDatabase GpayrollDatabase;
 
@@ -100,4 +102,23 @@ TEST(PayrollTest, TestDeleteEmployee)
 		ASSERT_TRUE(e == 0);
 	}
 }
+TEST(PayrollTest, TestTimeCardTransaction)
+{
+	GpayrollDatabase.clear();
+	int empId = 5;
+	AddHourlyEmployee t(empId, "Bill", "Home", 15.25);
+	t.Execute();
 
+	TimeCardTransaction tct(Date(10, 31, 2001), 8.0, empId);
+	tct.Execute();
+
+	Employee* e = GpayrollDatabase.GetEmployee(empId);
+	ASSERT_TRUE(e);
+
+	PaymentClassification* pc = e->GetClassification();
+	HourlyClassification* hc = dynamic_cast<HourlyClassification*>(pc);
+	ASSERT_TRUE(hc);
+	TimeCard* tc = hc->GetTimeCard(Date(10, 31, 2001));
+	ASSERT_TRUE(tc);
+	ASSERT_EQ(8.0, tc->GetHours());
+}

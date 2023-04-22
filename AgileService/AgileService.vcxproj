@@ -133,12 +133,15 @@
     <ClCompile Include="AddSalariedEmployee.cpp" />
     <ClCompile Include="AgileService.cpp" />
     <ClCompile Include="CommissionedClassification.cpp" />
+    <ClCompile Include="Date.cpp" />
     <ClCompile Include="DeleteEmployeeTransaction.cpp" />
     <ClCompile Include="Employee.cpp" />
     <ClCompile Include="HourlyClassification.cpp" />
     <ClCompile Include="PayrollDatabase.cpp" />
     <ClCompile Include="PayrollTest.cpp" />
     <ClCompile Include="SalariedClassification.cpp" />
+    <ClCompile Include="TimeCard.cpp" />
+    <ClCompile Include="TimeCardTransaction.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -150,6 +153,7 @@
     <ClInclude Include="AddSalariedEmployee.h" />
     <ClInclude Include="BiweeklySchedule.h" />
     <ClInclude Include="CommissionedClassification.h" />
+    <ClInclude Include="Date.h" />
     <ClInclude Include="DeleteEmployeeTransaction.h" />
     <ClInclude Include="Employee.h" />
     <ClInclude Include="HoldMethod.h" />
@@ -160,6 +164,8 @@
     <ClInclude Include="PaymentSchedule.h" />
     <ClInclude Include="PayrollDatabase.h" />
     <ClInclude Include="SalariedClassification.h" />
+    <ClInclude Include="TimeCard.h" />
+    <ClInclude Include="TimeCardTransaction.h" />
     <ClInclude Include="Transaction.h" />
     <ClInclude Include="WeeklySchedule.h" />
   </ItemGroup>
