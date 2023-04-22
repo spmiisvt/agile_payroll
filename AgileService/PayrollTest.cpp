@@ -12,6 +12,7 @@
 #include "AddCommissionedEmployee.h"
 #include "CommissionedClassification.h"
 #include "BiweeklySchedule.h"
+#include "DeleteEmployeeTransaction.h"
 
 extern PayrollDatabase GpayrollDatabase;
 
@@ -82,3 +83,21 @@ TEST(PayrollTest, TestAddCommissionedEmployee)
 	HoldMethod* hm = dynamic_cast<HoldMethod*>(pm);
 	ASSERT_TRUE(hm);
 }
+TEST(PayrollTest, TestDeleteEmployee)
+{
+	GpayrollDatabase.clear();
+	int empId = 4;
+	AddCommissionedEmployee t(empId, "Lance", "Home", 2500, 3.2);
+	t.Execute();
+	{
+		Employee* e = GpayrollDatabase.GetEmployee(empId);
+		ASSERT_TRUE(e);
+	}
+	DeleteEmployeeTransaction dt(empId);
+	dt.Execute();
+	{
+		Employee* e = GpayrollDatabase.GetEmployee(empId);
+		ASSERT_TRUE(e == 0);
+	}
+}
+

@@ -133,6 +133,7 @@
     <ClCompile Include="AddSalariedEmployee.cpp" />
     <ClCompile Include="AgileService.cpp" />
     <ClCompile Include="CommissionedClassification.cpp" />
+    <ClCompile Include="DeleteEmployeeTransaction.cpp" />
     <ClCompile Include="Employee.cpp" />
     <ClCompile Include="HourlyClassification.cpp" />
     <ClCompile Include="PayrollDatabase.cpp" />
@@ -149,6 +150,7 @@
     <ClInclude Include="AddSalariedEmployee.h" />
     <ClInclude Include="BiweeklySchedule.h" />
     <ClInclude Include="CommissionedClassification.h" />
+    <ClInclude Include="DeleteEmployeeTransaction.h" />
     <ClInclude Include="Employee.h" />
     <ClInclude Include="HoldMethod.h" />
     <ClInclude Include="HourlyClassification.h" />
