@@ -288,7 +288,6 @@ TEST(PayrollTest, TestChangeMemberTransaction)
 	ASSERT_TRUE(member);
 	ASSERT_TRUE(e == member);
 }
-
 TEST(PayrollTest, TestPaySingleSalariedEmployeeOnWrongDate)
 {
 	GpayrollDatabase.clear();
@@ -339,7 +338,6 @@ TEST(PayrollTest, TestPayMultipleSalariedEmployees)
 	ASSERT_DOUBLE_EQ(0.0, pc3->GetDeductions(), .01);
 	ASSERT_DOUBLE_EQ(3000.00, pc3->GetNetPay(), .01);
 }
-
 TEST(PayrollTest, TestPaySingleHourlyEmployeeNoTimeCards)
 {
 	GpayrollDatabase.clear();
@@ -567,4 +565,121 @@ TEST(PayrollTest, TestPaySingleCommissionedEmployeeSpanMultiplePayPeriods)
 	ASSERT_TRUE("Hold" == pc->GetField("Disposition"));
 	ASSERT_DOUBLE_EQ(0.0, pc->GetDeductions(), .001);
 	ASSERT_DOUBLE_EQ(countPay, pc->GetNetPay(), .001);
+}
+TEST(PayrollTest, TestSalariedUnionMemberDues)
+{
+	GpayrollDatabase.clear();
+	const int empId = 1;
+	AddSalariedEmployee t(empId, "Bob", "Home", 1000.00);
+	t.Execute();
+	const int memberId = 7734;
+	ChangeMemberTransaction cmt(empId, memberId, 9.42);
+	cmt.Execute();
+	const Date payDate(11, 30, 2001);
+	const int fridays = 5;
+	PaydayTransaction pt(payDate);
+	pt.Execute();
+	PayCheck* pc = pt.GetPaycheck(empId);
+	ASSERT_TRUE(pc);
+	ASSERT_TRUE(pc->GetPayPeriodEndDate() == payDate);
+	ASSERT_DOUBLE_EQ(1000.00, pc->GetGrossPay(), 0.01);
+	ASSERT_TRUE("Hold" == pc->GetField("Disposition"));
+	ASSERT_DOUBLE_EQ(fridays * 9.42, pc->GetDeductions(), 0.01);
+	ASSERT_DOUBLE_EQ(1000.0 - (fridays * 9.42), pc->GetNetPay(), 0.01);
+}
+TEST(PayrollTest, TestHourlyUnionMemberDues)
+{
+	GpayrollDatabase.clear();
+	const int empId = 1;
+	AddHourlyEmployee t(empId, "Bill", "Home", 15.24);
+	t.Execute();
+	const int memberId = 7734;
+	ChangeMemberTransaction cmt(empId, memberId, 9.42);
+	cmt.Execute();
+	const Date payDate(11, 9, 2001);
+	TimeCardTransaction tct(payDate, 8.0, empId);
+	tct.Execute();
+	PaydayTransaction pt(payDate);
+	pt.Execute();
+	PayCheck* pc = pt.GetPaycheck(empId);
+	ASSERT_TRUE(pc);
+	ASSERT_TRUE(pc->GetPayPeriodEndDate() == payDate);
+	ASSERT_DOUBLE_EQ(8 * 15.24, pc->GetGrossPay(), 0.01);
+	ASSERT_TRUE("Hold" == pc->GetField("Disposition"));
+	ASSERT_DOUBLE_EQ(9.42, pc->GetDeductions(), 0.01);
+	ASSERT_DOUBLE_EQ((8 * 15.24) - 9.42, pc->GetNetPay(), 0.01);
+}
+TEST(PayrollTest, TestCommissionedUnionMemberDues)
+{
+	GpayrollDatabase.clear();
+	const int empId = 3;
+	AddCommissionedEmployee t(empId, "Lance", "Home", 2500, .032);
+	t.Execute();
+	const int memberId = 7734;
+	ChangeMemberTransaction cmt(empId, memberId, 9.42);
+	cmt.Execute();
+	const Date payDate(11, 9, 2001);
+	PaydayTransaction pt(payDate);
+	pt.Execute();
+	PayCheck* pc = pt.GetPaycheck(empId);
+	ASSERT_TRUE(pc);
+	ASSERT_TRUE(pc->GetPayPeriodEndDate() == payDate);
+	ASSERT_DOUBLE_EQ(2500.00, pc->GetGrossPay(), 0.01);
+	ASSERT_TRUE("Hold" == pc->GetField("Disposition"));
+	ASSERT_DOUBLE_EQ(2 * 9.42, pc->GetDeductions(), 0.01);
+	ASSERT_DOUBLE_EQ(2500.0 - (2 * 9.42), pc->GetNetPay(), 0.01);
+}
+TEST(PayrollTest, TestHourlyUnionMemberServiceCharge)
+{
+	GpayrollDatabase.clear();
+	const int empId = 1;
+	AddHourlyEmployee t(empId, "Bill", "Home", 15.24);
+	t.Execute();
+	const int memberId = 7734;
+	ChangeMemberTransaction cmt(empId, memberId, 9.42);
+	cmt.Execute();
+	const Date payDate(11, 9, 2001);
+	ServiceChargeTransaction sct(memberId, payDate, 19.42);
+	sct.Execute();
+	TimeCardTransaction tct(payDate, 8.0, empId);
+	tct.Execute();
+	PaydayTransaction pt(payDate);
+	pt.Execute();
+	PayCheck* pc = pt.GetPaycheck(empId);
+	ASSERT_TRUE(pc);
+	ASSERT_TRUE(pc->GetPayPeriodEndDate() == payDate);
+	ASSERT_DOUBLE_EQ(8 * 15.24, pc->GetGrossPay(), 0.01);
+	ASSERT_TRUE("Hold" == pc->GetField("Disposition"));
+	ASSERT_DOUBLE_EQ(9.42 + 19.42, pc->GetDeductions(), 0.01);
+	ASSERT_DOUBLE_EQ((8 * 15.24) - (9.42 + 19.42), pc->GetNetPay(), 0.01);
+}
+TEST(PayrollTest, TestServiceChargesSpanningMultiplePayPeriods)
+{
+	GpayrollDatabase.clear();
+	int empId = 1;
+	AddHourlyEmployee t(empId, "Bill", "Home", 15.24);
+	t.Execute();
+	int memberId = 7734;
+	ChangeMemberTransaction cmt(empId, memberId, 9.42);
+	cmt.Execute();
+	Date earlyDate(11, 2, 2001); // previous Friday
+	Date payDate(11, 9, 2001);
+	Date lateDate(11, 16, 2001); // next Friday
+	ServiceChargeTransaction sct(memberId, payDate, 19.42);
+	sct.Execute();
+	ServiceChargeTransaction sctEarly(memberId, earlyDate, 100.00);
+	sctEarly.Execute();
+	ServiceChargeTransaction sctLate(memberId, lateDate, 200.00);
+	sctLate.Execute();
+	TimeCardTransaction tct(payDate, 8.0, empId);
+	tct.Execute();
+	PaydayTransaction pt(payDate);
+	pt.Execute();
+	PayCheck* pc = pt.GetPaycheck(empId);
+	ASSERT_TRUE(pc);
+	ASSERT_TRUE(pc->GetPayPeriodEndDate() == payDate);
+	ASSERT_DOUBLE_EQ(8 * 15.24, pc->GetGrossPay(), 0.01);
+	ASSERT_TRUE("Hold" == pc->GetField("Disposition"));
+	ASSERT_DOUBLE_EQ(9.42 + 19.42, pc->GetDeductions(), 0.01);
+	ASSERT_DOUBLE_EQ((8 * 15.24) - (9.42 + 19.42), pc->GetNetPay(), 0.01);
 }
