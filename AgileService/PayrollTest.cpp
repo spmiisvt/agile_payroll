@@ -21,7 +21,9 @@
 #include "Affiliation.h"
 #include "ServiceCharge.h"
 #include "ServiceChargeTransaction.h"
-
+#include "ChangeEmployeeTransaction.h"
+#include "ChangeNameTransaction.h"
+#include "ChangeAddressTransaction.h"
 
 extern PayrollDatabase GpayrollDatabase;
 
@@ -172,4 +174,28 @@ TEST(PayrollTest, TestAddServiceCharge)
 	ServiceCharge* sc = af->GetServiceCharge(serviceChargeDate);
 	ASSERT_TRUE(sc);
 	ASSERT_EQ(12.95, sc->GetAmount(), 0.01);
+}
+TEST(PayrollTest, TestChangeNameTransaction)
+{
+	GpayrollDatabase.clear();
+	int empId = 8;
+	AddHourlyEmployee t(empId, "Bill", "Home", 15.25);
+	t.Execute();
+	ChangeNameTransaction cnt(empId, "Bob");
+	cnt.Execute();
+	Employee* e = GpayrollDatabase.GetEmployee(empId);
+	ASSERT_TRUE(e);
+	ASSERT_TRUE("Bob" == e->GetName());
+}
+TEST(PayrollTest, TestChangeAddressTransaction)
+{
+	GpayrollDatabase.clear();
+	int empId = 9;
+	AddHourlyEmployee t(empId, "Thomas", "Home", 15.25);
+	t.Execute();
+	ChangeAddressTransaction cnt(empId, "21 street 165");
+	cnt.Execute();
+	Employee* e = GpayrollDatabase.GetEmployee(empId);
+	ASSERT_TRUE(e);
+	ASSERT_TRUE("21 street 165" == e->GetAddress());
 }

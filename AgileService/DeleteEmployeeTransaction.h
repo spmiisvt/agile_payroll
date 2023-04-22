@@ -1,6 +1,9 @@
 #pragma once
 
 #include "Transaction.h"
+#include "PayrollDatabase.h"
+
+extern PayrollDatabase GpayrollDatabase;
 
 class DeleteEmployeeTransaction : public Transaction
 {

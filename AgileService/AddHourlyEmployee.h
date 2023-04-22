@@ -1,6 +1,12 @@
 #pragma once
 
 #include "AddEmployeeTransaction.h"
+#include "WeeklySchedule.h"
+#include "HourlyClassification.h"
+
+#include <string>
+
+using namespace std;
 
 class AddHourlyEmployee : public AddEmployeeTransaction
 {

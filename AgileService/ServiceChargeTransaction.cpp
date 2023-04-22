@@ -1,9 +1,6 @@
 #include "ServiceChargeTransaction.h"
 
 
-extern PayrollDatabase GpayrollDatabase;
-
-
 ServiceChargeTransaction::
 ServiceChargeTransaction(int memberId, Date date, double charge)
 	: itsMemberId(memberId)

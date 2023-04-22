@@ -8,6 +8,8 @@
 #include "UnionAffiliation.h"
 #include "Affiliation.h"
 
+extern PayrollDatabase GpayrollDatabase;
+
 class ServiceChargeTransaction : public Transaction
 {
 public:

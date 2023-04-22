@@ -2,6 +2,13 @@
 
 #include "AddEmployeeTransaction.h"
 
+#include "CommissionedClassification.h"
+#include "BiweeklySchedule.h"
+
+#include <string>
+using namespace std;
+
+
 class AddCommissionedEmployee : public AddEmployeeTransaction
 {
 public:

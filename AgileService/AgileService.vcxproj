@@ -132,6 +132,9 @@
     <ClCompile Include="AddHourlyEmployee.cpp" />
     <ClCompile Include="AddSalariedEmployee.cpp" />
     <ClCompile Include="AgileService.cpp" />
+    <ClCompile Include="ChangeAddressTransaction.cpp" />
+    <ClCompile Include="ChangeEmployeeTransaction.cpp" />
+    <ClCompile Include="ChangeNameTransaction.cpp" />
     <ClCompile Include="CommissionedClassification.cpp" />
     <ClCompile Include="Date.cpp" />
     <ClCompile Include="DeleteEmployeeTransaction.cpp" />
@@ -158,6 +161,9 @@
     <ClInclude Include="AddSalariedEmployee.h" />
     <ClInclude Include="Affiliation.h" />
     <ClInclude Include="BiweeklySchedule.h" />
+    <ClInclude Include="ChangeAddressTransaction.h" />
+    <ClInclude Include="ChangeEmployeeTransaction.h" />
+    <ClInclude Include="ChangeNameTransaction.h" />
     <ClInclude Include="CommissionedClassification.h" />
     <ClInclude Include="Date.h" />
     <ClInclude Include="DeleteEmployeeTransaction.h" />

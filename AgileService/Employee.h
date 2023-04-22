@@ -1,13 +1,14 @@
 #pragma once
+#include "PaymentClassification.h"
+#include "PaymentSchedule.h"
+#include "PaymentMethod.h"
+#include "Affiliation.h"
+#include "Date.h"
+
 #include <string>
 
 using namespace std;
 
-class PaymentClassification;
-class PaymentSchedule;
-class PaymentMethod;
-class Affiliation;
-class Date;
 
 class Employee
 {

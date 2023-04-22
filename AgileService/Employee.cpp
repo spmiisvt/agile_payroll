@@ -1,7 +1,4 @@
 #include "Employee.h"
-#include "PaymentClassification.h"
-#include "PaymentSchedule.h"
-#include "PaymentMethod.h"
 
 
 Employee::~Employee()

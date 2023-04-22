@@ -1,5 +1,7 @@
 #pragma once
 #include "AddEmployeeTransaction.h"
+#include "SalariedClassification.h"
+#include "MonthlySchedule.h"
 
 class AddSalariedEmployee : public AddEmployeeTransaction
 {

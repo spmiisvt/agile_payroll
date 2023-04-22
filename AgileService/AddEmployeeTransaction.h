@@ -1,12 +1,18 @@
 #pragma once
 
 #include "Transaction.h"
-#include <string>
+#include "HoldMethod.h"
+#include "Employee.h"
+#include "PayrollDatabase.h"
 
+#include <string>
 using namespace std;
 
-class PaymentClassification;
+class PaymentMethod;
 class PaymentSchedule;
+class PaymentClassification;
+
+extern PayrollDatabase GpayrollDatabase;
 
 class AddEmployeeTransaction : public Transaction
 {

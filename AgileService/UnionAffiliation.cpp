@@ -1,6 +1,5 @@
 #include "UnionAffiliation.h"
-#include "ServiceCharge.h"
-#include "Date.h"
+
 
 UnionAffiliation::~UnionAffiliation() {
     for (auto& el : itsServiceCharges)

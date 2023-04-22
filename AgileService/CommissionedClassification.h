@@ -3,7 +3,9 @@
 #include "PaymentClassification.h"
 #include "SalesReceipt.h"
 #include "Date.h"
+
 #include <map>
+#include <string>
 
 using namespace std;
 

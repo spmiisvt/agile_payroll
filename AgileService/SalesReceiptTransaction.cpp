@@ -1,10 +1,5 @@
 #include "SalesReceiptTransaction.h"
-#include "Employee.h"
-#include "PayrollDatabase.h"
-#include "CommissionedClassification.h"
-#include "SalesReceipt.h"
 
-extern PayrollDatabase GpayrollDatabase;
 
 SalesReceiptTransaction::SalesReceiptTransaction(Date date, double amount, int empid)
 	: itsDate(date)

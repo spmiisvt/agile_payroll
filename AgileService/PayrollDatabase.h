@@ -1,11 +1,11 @@
 #pragma once
+#include "Employee.h"
 
 #include <map>
 
-
 using namespace std;
 
-class Employee;
+
 
 class PayrollDatabase
 {

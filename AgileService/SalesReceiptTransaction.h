@@ -2,6 +2,12 @@
 
 #include "Transaction.h"
 #include "Date.h"
+#include "Employee.h"
+#include "PayrollDatabase.h"
+#include "CommissionedClassification.h"
+#include "SalesReceipt.h"
+
+extern PayrollDatabase GpayrollDatabase;
 
 class SalesReceiptTransaction : public Transaction
 {

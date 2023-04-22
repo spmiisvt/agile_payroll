@@ -1,13 +1,5 @@
 #include "AddEmployeeTransaction.h"
-#include "HoldMethod.h"
-#include "Employee.h"
-#include "PayrollDatabase.h"
 
-class PaymentMethod;
-class PaymentSchedule;
-class PaymentClassification;
-
-extern PayrollDatabase GpayrollDatabase;
 
 AddEmployeeTransaction::
 AddEmployeeTransaction(int empid, string name, string address)

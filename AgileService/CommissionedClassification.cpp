@@ -1,8 +1,5 @@
 #include "CommissionedClassification.h"
 
-#include <string>
-
-using namespace std;
 
 CommissionedClassification::~CommissionedClassification()
 {

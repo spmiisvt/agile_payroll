@@ -1,7 +1,9 @@
 #pragma once
 #include "Affiliation.h"
+#include "ServiceCharge.h"
 #include "Date.h"
 #include <map>
+
 
 using namespace std;
 
