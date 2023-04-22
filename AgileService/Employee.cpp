@@ -9,6 +9,7 @@ Employee::~Employee()
 	delete itsClassification;
 	delete itsSchedule;
 	delete itsPaymentMethod;
+	delete itsAffiliation;
 }
 
 Employee::Employee(int empId, string name, string address)
@@ -18,6 +19,7 @@ Employee::Employee(int empId, string name, string address)
 	, itsClassification(nullptr)
 	, itsSchedule(nullptr)
 	, itsPaymentMethod(nullptr)
+	, itsAffiliation(nullptr)
 {}
 void Employee::SetName(string name)
 {
@@ -45,4 +47,9 @@ void Employee::SetMethod(PaymentMethod* pm)
 {
 	delete itsPaymentMethod;
 	itsPaymentMethod = pm;
+}
+void Employee::SetAffiliation(Affiliation* af)
+{
+	delete itsAffiliation;
+	itsAffiliation = af;
 }

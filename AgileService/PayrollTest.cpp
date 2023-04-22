@@ -15,6 +15,13 @@
 #include "DeleteEmployeeTransaction.h"
 #include "TimeCardTransaction.h"
 #include "TimeCard.h"
+#include "SalesReceipt.h"
+#include "SalesReceiptTransaction.h"
+#include "UnionAffiliation.h"
+#include "Affiliation.h"
+#include "ServiceCharge.h"
+#include "ServiceChargeTransaction.h"
+
 
 extern PayrollDatabase GpayrollDatabase;
 
@@ -121,4 +128,48 @@ TEST(PayrollTest, TestTimeCardTransaction)
 	TimeCard* tc = hc->GetTimeCard(Date(10, 31, 2001));
 	ASSERT_TRUE(tc);
 	ASSERT_EQ(8.0, tc->GetHours());
+}
+TEST(PayrollTest, TestSalesReceiptTransaction)
+{
+	GpayrollDatabase.clear();
+	int empId = 6;
+	AddCommissionedEmployee t(empId, "Miller", "Home", 2400, 1.7);
+	t.Execute();
+	const Date saleDate(11, 12, 2001);
+	SalesReceiptTransaction srt(saleDate, 20000, empId);
+	srt.Execute();
+
+	Employee* e = GpayrollDatabase.GetEmployee(empId);
+	ASSERT_TRUE(e);
+
+	PaymentClassification* pc = e->GetClassification();
+	CommissionedClassification* cc = dynamic_cast<CommissionedClassification*>(pc);
+	ASSERT_TRUE(cc);
+	SalesReceipt* sr = cc->GetReceipt(saleDate);
+	ASSERT_TRUE(sr);
+	ASSERT_DOUBLE_EQ(20000, sr->GetAmount(), 0.01);
+}
+TEST(PayrollTest, TestAddServiceCharge)
+{
+	GpayrollDatabase.clear();
+	int empId = 7;
+	const int memberId = 86;
+	AddHourlyEmployee t(empId, "Bill", "Home", 15.25);
+	t.Execute();
+
+	Employee* e = GpayrollDatabase.GetEmployee(empId);
+	ASSERT_TRUE(e);
+
+	UnionAffiliation* af = new UnionAffiliation(memberId, 12.5);
+	e->SetAffiliation(af);
+
+	const Date serviceChargeDate(11, 01, 2001);
+
+	GpayrollDatabase.AddUnionMember(memberId, e);
+	ServiceChargeTransaction sct(memberId, serviceChargeDate, 12.95);
+	sct.Execute();
+
+	ServiceCharge* sc = af->GetServiceCharge(serviceChargeDate);
+	ASSERT_TRUE(sc);
+	ASSERT_EQ(12.95, sc->GetAmount(), 0.01);
 }

@@ -1,6 +1,8 @@
 #pragma once
-#include "PaymentClassification.h"
 
+#include "PaymentClassification.h"
+#include "SalesReceipt.h"
+#include "Date.h"
 #include <map>
 
 using namespace std;
@@ -14,8 +16,11 @@ public:
 	double GetSalary() const;
 	double GetRate() const;
 
+	SalesReceipt* GetReceipt(const Date& saleDate);
+	void AddSalesReceipt(SalesReceipt*);
+
 private:
 	double itsSalary;
 	double itsCommissionRate;
-	
+	map<Date, SalesReceipt*> itsReceipts;
 };

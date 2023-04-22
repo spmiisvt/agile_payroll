@@ -23,4 +23,19 @@ void PayrollDatabase::clear()
 		delete employee.second;
 	}
 	itsEmployees.clear();
+	itsUnionMembers.clear();
+}
+void PayrollDatabase::AddUnionMember(int memberId, Employee* e)
+{
+	itsUnionMembers[memberId] = e->GetEmpId();
+}
+
+void PayrollDatabase::RemoveUnionMember(int memberId)
+{
+	itsUnionMembers.erase(memberId);
+}
+
+Employee* PayrollDatabase::GetUnionMember(int memberId)
+{
+	return PayrollDatabase::GetEmployee(itsUnionMembers[memberId]);
 }
