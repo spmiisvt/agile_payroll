@@ -1,8 +1,6 @@
 #include "ChangeMemberTransaction.h"
 
 
-
-
 ChangeMemberTransaction::
 ChangeMemberTransaction(int empid, int memberid, double dues)
 	: ChangeAffiliationTransaction(empid)

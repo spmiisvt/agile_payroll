@@ -38,3 +38,12 @@ Employee* PayrollDatabase::GetUnionMember(int memberId)
 {
 	return PayrollDatabase::GetEmployee(itsUnionMembers[memberId]);
 }
+
+void PayrollDatabase::GetAllEmployeeIds(list<int>& empIds)
+{
+	empIds.clear();
+	for (auto i = itsEmployees.begin(); i != itsEmployees.end(); ++i)
+	{
+		empIds.push_back((*i).first);
+	}
+}

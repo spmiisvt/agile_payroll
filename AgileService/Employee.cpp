@@ -16,7 +16,7 @@ Employee::Employee(int empId, string name, string address)
 	, itsClassification(nullptr)
 	, itsSchedule(nullptr)
 	, itsPaymentMethod(nullptr)
-	, itsAffiliation(nullptr)
+	, itsAffiliation(new NoAffiliation())
 {}
 void Employee::SetName(string name)
 {
@@ -49,4 +49,26 @@ void Employee::SetAffiliation(Affiliation* af)
 {
 	delete itsAffiliation;
 	itsAffiliation = af;
+}
+
+
+bool Employee::IsPayDate(const Date& payDate) const
+{
+	return itsSchedule->IsPayDate(payDate);
+}
+
+Date Employee::GetPayPeriodStartDate(const Date& payPeriodEndDate) const
+{
+	return itsSchedule->GetPayPeriodStartDate(payPeriodEndDate);
+}
+
+void Employee::Payday(PayCheck& pc) const
+{
+	const double grossPay = itsClassification->CalculatePay(pc);
+	const double deductions = itsAffiliation->CalculateDeductions(pc);
+	const double netPay = grossPay - deductions;
+	pc.SetGrossPay(grossPay);
+	pc.SetDeductions(deductions);
+	pc.SetNetPay(netPay);
+	itsPaymentMethod->Pay(pc);
 }

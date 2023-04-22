@@ -10,3 +10,8 @@ double SalariedClassification::GetSalary() const
 {
 	return itsSalary;
 }
+
+double SalariedClassification::CalculatePay(PayCheck&) const
+{
+	return itsSalary;
+}

@@ -132,6 +132,7 @@
     <ClCompile Include="AddHourlyEmployee.cpp" />
     <ClCompile Include="AddSalariedEmployee.cpp" />
     <ClCompile Include="AgileService.cpp" />
+    <ClCompile Include="BiweeklySchedule.cpp" />
     <ClCompile Include="ChangeAddressTransaction.cpp" />
     <ClCompile Include="ChangeAffiliationTransaction.cpp" />
     <ClCompile Include="ChangeClassificationTransaction.cpp" />
@@ -145,7 +146,12 @@
     <ClCompile Include="Date.cpp" />
     <ClCompile Include="DeleteEmployeeTransaction.cpp" />
     <ClCompile Include="Employee.cpp" />
+    <ClCompile Include="HoldMethod.cpp" />
     <ClCompile Include="HourlyClassification.cpp" />
+    <ClCompile Include="MonthlySchedule.cpp" />
+    <ClCompile Include="NoAffiliation.cpp" />
+    <ClCompile Include="PayCheck.cpp" />
+    <ClCompile Include="PaydayTransaction.cpp" />
     <ClCompile Include="PayrollDatabase.cpp" />
     <ClCompile Include="PayrollTest.cpp" />
     <ClCompile Include="SalariedClassification.cpp" />
@@ -156,6 +162,7 @@
     <ClCompile Include="TimeCard.cpp" />
     <ClCompile Include="TimeCardTransaction.cpp" />
     <ClCompile Include="UnionAffiliation.cpp" />
+    <ClCompile Include="WeeklySchedule.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -183,6 +190,9 @@
     <ClInclude Include="HoldMethod.h" />
     <ClInclude Include="HourlyClassification.h" />
     <ClInclude Include="MonthlySchedule.h" />
+    <ClInclude Include="NoAffiliation.h" />
+    <ClInclude Include="PayCheck.h" />
+    <ClInclude Include="PaydayTransaction.h" />
     <ClInclude Include="PaymentClassification.h" />
     <ClInclude Include="PaymentMethod.h" />
     <ClInclude Include="PaymentSchedule.h" />

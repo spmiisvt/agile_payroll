@@ -32,3 +32,17 @@ SalesReceipt* CommissionedClassification::GetReceipt(const Date& saleDate)
 {
 	return itsReceipts[saleDate];
 }
+
+double CommissionedClassification::CalculatePay(PayCheck& pc) const
+{
+	double commission = 0.0;
+	for (auto i = itsReceipts.begin(); i != itsReceipts.end(); ++i)
+	{
+		SalesReceipt* receipt = (*i).second;
+		if (Date::IsBetween(receipt->GetDate(), pc.GetPayPeriodStartDate(), pc.GetPayPeriodEndDate()))
+		{
+			commission += receipt->GetAmount() * itsCommissionRate;
+		}
+	}
+	return itsSalary + commission;
+}

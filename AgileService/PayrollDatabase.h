@@ -2,9 +2,9 @@
 #include "Employee.h"
 
 #include <map>
+#include <list>
 
 using namespace std;
-
 
 
 class PayrollDatabase
@@ -22,6 +22,7 @@ public:
 	void RemoveUnionMember(int memberId);
 
 	void clear();
+	void GetAllEmployeeIds(list<int>&);
 
 private:
 	map<int, Employee*> itsEmployees;

@@ -2,6 +2,7 @@
 
 #include "PaymentClassification.h"
 #include "SalesReceipt.h"
+#include "PayCheck.h"
 #include "Date.h"
 
 #include <map>
@@ -20,6 +21,8 @@ public:
 
 	SalesReceipt* GetReceipt(const Date& saleDate);
 	void AddSalesReceipt(SalesReceipt*);
+
+	double CalculatePay(PayCheck&) const override;
 
 private:
 	double itsSalary;

@@ -1,13 +1,13 @@
 #pragma once
 #include "Affiliation.h"
 #include "ServiceCharge.h"
+#include "PayCheck.h"
 #include "Date.h"
 #include <map>
 
 
 using namespace std;
 
-class ServiceCharge;
 
 class UnionAffiliation : public Affiliation
 {
@@ -20,6 +20,8 @@ public:
 
 	double GetDues() const { return itsDues; }
 	int GetMemberId() const { return itsMemberId; }
+
+	double CalculateDeductions(PayCheck&) const override;
 
 private:
 	int itsMemberId;

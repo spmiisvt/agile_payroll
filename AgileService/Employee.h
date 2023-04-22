@@ -4,6 +4,9 @@
 #include "PaymentMethod.h"
 #include "Affiliation.h"
 #include "Date.h"
+#include "PaymentMethod.h"
+#include "PayCheck.h"
+#include "NoAffiliation.h"
 
 #include <string>
 
@@ -33,6 +36,9 @@ public:
 	PaymentMethod* GetMethod() const { return itsPaymentMethod; }
 	Affiliation* GetAffiliation() const { return itsAffiliation; }
 	
+	void Payday(PayCheck&) const;
+	bool IsPayDate(const Date& payDate) const;
+	Date GetPayPeriodStartDate(const Date& payPeriodEndDate) const;
 
 private:
 	int itsEmpId;
