@@ -24,6 +24,12 @@
 #include "ChangeEmployeeTransaction.h"
 #include "ChangeNameTransaction.h"
 #include "ChangeAddressTransaction.h"
+#include "ChangeClassificationTransaction.h"
+#include "ChangeHourlyTransaction.h"
+#include "ChangeSalariedTransaction.h"
+#include "ChangeCommissionedTransaction.h"
+#include "ChangeAffiliationTransaction.h"
+#include "ChangeMemberTransaction.h"
 
 extern PayrollDatabase GpayrollDatabase;
 
@@ -198,4 +204,82 @@ TEST(PayrollTest, TestChangeAddressTransaction)
 	Employee* e = GpayrollDatabase.GetEmployee(empId);
 	ASSERT_TRUE(e);
 	ASSERT_TRUE("21 street 165" == e->GetAddress());
+}
+TEST(PayrollTest, TestChangeHourlyTransaction)
+{
+	GpayrollDatabase.clear();
+	int empId = 10;
+	AddCommissionedEmployee t(empId, "Lance", "Home", 2500, 3.2);
+	t.Execute();
+	ChangeHourlyTransaction cht(empId, 27.52);
+	cht.Execute();
+	Employee* e = GpayrollDatabase.GetEmployee(empId);
+	ASSERT_TRUE(e);
+	PaymentClassification* pc = e->GetClassification();
+	ASSERT_TRUE(pc);
+	HourlyClassification* hc = dynamic_cast<HourlyClassification*>(pc);
+	ASSERT_TRUE(hc);
+	ASSERT_DOUBLE_EQ(27.52, hc->GetRate(), 0.01);
+	PaymentSchedule* ps = e->GetSchedule();
+	WeeklySchedule* ws = dynamic_cast<WeeklySchedule*>(ps);
+	ASSERT_TRUE(ws);
+}
+TEST(PayrollTest, TestChangeSalariedTransaction)
+{
+	GpayrollDatabase.clear();
+	const int empId = 11;
+	AddCommissionedEmployee t(empId, "Lance", "Home", 2500, 3.2);
+	t.Execute();
+	ChangeSalariedTransaction cht(empId, 25000);
+	cht.Execute();
+	Employee* e = GpayrollDatabase.GetEmployee(empId);
+	ASSERT_TRUE(e);
+	PaymentClassification* pc = e->GetClassification();
+	ASSERT_TRUE(pc);
+	const auto sc = dynamic_cast<SalariedClassification*>(pc);
+	ASSERT_TRUE(sc);
+	ASSERT_DOUBLE_EQ(25000, sc->GetSalary(), 0.01);
+	PaymentSchedule* ps = e->GetSchedule();
+	const auto ms = dynamic_cast<MonthlySchedule*>(ps);
+	ASSERT_TRUE(ms);
+}
+TEST(PayrollTest, TestChangeCommissionedTransaction)
+{
+	GpayrollDatabase.clear();
+	const int empId = 12;
+	AddHourlyEmployee t(empId, "Bill", "Home", 15.25);
+	t.Execute();
+	ChangeCommissionedTransaction cht(empId, 25000, 4.5);
+	cht.Execute();
+	Employee* e = GpayrollDatabase.GetEmployee(empId);
+	ASSERT_TRUE(e);
+	PaymentClassification* pc = e->GetClassification();
+	ASSERT_TRUE(pc);
+	const auto cc = dynamic_cast<CommissionedClassification*>(pc);
+	ASSERT_TRUE(cc);
+	ASSERT_DOUBLE_EQ(25000, cc->GetSalary(), 0.01);
+	ASSERT_DOUBLE_EQ(4.5, cc->GetRate(), 0.01);
+	PaymentSchedule* ps = e->GetSchedule();
+	const auto bws = dynamic_cast<BiweeklySchedule*>(ps);
+	ASSERT_TRUE(bws);
+}
+TEST(PayrollTest, TestChangeMemberTransaction)
+{
+	GpayrollDatabase.clear();
+	const int empId = 13;
+	int memberId = 352;
+	AddHourlyEmployee t(empId, "Bill", "Home", 15.25);
+	t.Execute();
+	ChangeMemberTransaction cmt(empId, memberId, 99.42);
+	cmt.Execute();
+	Employee* e = GpayrollDatabase.GetEmployee(empId);
+	ASSERT_TRUE(e);
+	Affiliation* af = e->GetAffiliation();
+	ASSERT_TRUE(af);
+	UnionAffiliation* uf = dynamic_cast<UnionAffiliation*>(af);
+	ASSERT_TRUE(uf);
+	ASSERT_DOUBLE_EQ(99.42, uf->GetDues(), .001);
+	Employee* member = GpayrollDatabase.GetUnionMember(memberId);
+	ASSERT_TRUE(member);
+	ASSERT_TRUE(e == member);
 }
