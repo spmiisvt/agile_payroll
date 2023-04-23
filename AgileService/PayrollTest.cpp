@@ -35,6 +35,14 @@
 #include "PaymentClassification.h"
 #include "PayCheck.h"
 #include "Date.h"
+#include "ChangeMethodTransaction.h"
+#include "MailMethod.h"
+#include "DirectMethod.h"
+#include "ChangeDirectTransaction.h"
+#include "ChangeHoldTransaction.h"
+#include "ChangeMailTransaction.h"
+#include "ChangeUnaffiliatedTransaction.h"
+
 
 extern PayrollDatabase GpayrollDatabase;
 
@@ -682,4 +690,74 @@ TEST(PayrollTest, TestServiceChargesSpanningMultiplePayPeriods)
 	ASSERT_TRUE("Hold" == pc->GetField("Disposition"));
 	ASSERT_DOUBLE_EQ(9.42 + 19.42, pc->GetDeductions(), 0.01);
 	ASSERT_DOUBLE_EQ((8 * 15.24) - (9.42 + 19.42), pc->GetNetPay(), 0.01);
+}
+TEST(PayrollTest, TestChangeUnaffiliatedTransaction)
+{
+	GpayrollDatabase.clear();
+	int empId = 5;
+	int memberId = 1422;
+	AddHourlyEmployee t(empId, "Fill", "Home", 14.64);
+	t.Execute();
+	ChangeMemberTransaction cmt(empId, memberId, 51.26);
+	cmt.Execute();
+	ChangeUnaffiliatedTransaction cut(empId);
+	cut.Execute();
+	Employee* e = GpayrollDatabase.GetEmployee(empId);
+	ASSERT_TRUE(e);
+	Affiliation* af = e->GetAffiliation();
+	ASSERT_TRUE(af);
+	NoAffiliation* nf = dynamic_cast<NoAffiliation*>(af);
+	ASSERT_TRUE(nf);
+	Employee* member = GpayrollDatabase.GetUnionMember(memberId);
+	ASSERT_TRUE(member == 0);
+}
+TEST(PayrollTest, TestChangeMailTransaction)
+{
+	GpayrollDatabase.clear();
+	int empId = 5;
+	AddHourlyEmployee t(empId, "Fill", "Home", 14.64);
+	t.Execute();
+	ChangeMailTransaction cmt(empId, "21 great street");
+	cmt.Execute();
+	Employee* e = GpayrollDatabase.GetEmployee(empId);
+	ASSERT_TRUE(e);
+	PaymentMethod* pm = e->GetMethod();
+	ASSERT_TRUE(pm);
+	MailMethod* mm = dynamic_cast<MailMethod*>(pm);
+	ASSERT_TRUE(mm);
+	ASSERT_TRUE("21 great street" == mm->GetAddress());
+}
+TEST(PayrollTest, TestChangeDirectTransaction)
+{
+	GpayrollDatabase.clear();
+	int empId = 5;
+	AddHourlyEmployee t(empId, "Fill", "Home", 14.64);
+	t.Execute();
+	ChangeDirectTransaction cdt(empId, "BTBANK", "6151848");
+	cdt.Execute();
+	Employee* e = GpayrollDatabase.GetEmployee(empId);
+	ASSERT_TRUE(e);
+	PaymentMethod* pm = e->GetMethod();
+	ASSERT_TRUE(pm);
+	DirectMethod* dm = dynamic_cast<DirectMethod*>(pm);
+	ASSERT_TRUE(dm);
+	ASSERT_TRUE("BTBANK" == dm->GetBank());
+	ASSERT_TRUE("6151848" == dm->GetAccount());
+}
+TEST(PayrollTest, TestChangeHoldTransaction)
+{
+	GpayrollDatabase.clear();
+	const int empId = 5;
+	AddHourlyEmployee t(empId, "Fill", "Home", 14.64);
+	t.Execute();
+	ChangeDirectTransaction cdt(empId, "BTBANK", "6151848");
+	cdt.Execute();
+	ChangeHoldTransaction cht(empId);
+	cht.Execute();
+	Employee* e = GpayrollDatabase.GetEmployee(empId);
+	ASSERT_TRUE(e);
+	PaymentMethod* pm = e->GetMethod();
+	ASSERT_TRUE(pm);
+	HoldMethod* hm = dynamic_cast<HoldMethod*>(pm);
+	ASSERT_TRUE(hm);
 }
